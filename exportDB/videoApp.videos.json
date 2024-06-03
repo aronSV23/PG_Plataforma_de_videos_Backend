@@ -1,0 +1,122 @@
+[{
+  "_id": {
+    "$oid": "665d0a9dd689fb75d1b723de"
+  },
+  "title": "gta meme",
+  "description": "san  andres meme",
+  "tags": [
+    "memes",
+    "gta",
+    "game"
+  ],
+  "filePath": "1717373597887-Lester - 30 seconds!_4.mp4",
+  "thumbnail": "defaultVideoThumbnail.png",
+  "views": 0,
+  "createdAt": {
+    "$date": "2024-06-03T00:13:17.900Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-03T00:13:17.900Z"
+  },
+  "__v": 0,
+  "user": {
+    "$oid": "665a6ccc3f3e2ce192adc28e"
+  }
+},
+{
+  "_id": {
+    "$oid": "665de223c04e4eb869d1b5fb"
+  },
+  "title": "meme",
+  "tags": [
+    "memes",
+    "fun"
+  ],
+  "filePath": "1717428771561-Surprised gopher old meme.mp4",
+  "thumbnail": "1717430907380-Dramatic_Chipmunk.png",
+  "user": {
+    "$oid": "665a6ccc3f3e2ce192adc28e"
+  },
+  "views": 0,
+  "createdAt": {
+    "$date": "2024-06-03T15:32:51.652Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-03T16:08:27.391Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665de327c04e4eb869d1b5fe"
+  },
+  "title": "start war meme",
+  "description": "old memes",
+  "tags": [
+    "lol",
+    "fun"
+  ],
+  "filePath": "1717429031307-ALL WOMEN ARE QUEENS!!.mp4",
+  "thumbnail": "defaultVideoThumbnail.png",
+  "user": {
+    "$oid": "665a67209cbb7e2898f3f836"
+  },
+  "views": 0,
+  "createdAt": {
+    "$date": "2024-06-03T15:37:11.333Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-03T15:37:11.333Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665de65b185dedf1cf2e461b"
+  },
+  "title": "gipher meme",
+  "description": "old memes",
+  "tags": [
+    "lol",
+    "fun",
+    "sus"
+  ],
+  "filePath": "1717429851918-Surprised gopher old meme.mp4",
+  "thumbnail": "defaultVideoThumbnail.png",
+  "user": {
+    "$oid": "665a67209cbb7e2898f3f836"
+  },
+  "views": 0,
+  "createdAt": {
+    "$date": "2024-06-03T15:50:51.935Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-03T15:50:51.935Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665de6dbda3cc42a177bf87c"
+  },
+  "title": "gipher meme",
+  "description": "old memes",
+  "tags": [
+    "lol",
+    "fun",
+    "sus"
+  ],
+  "filePath": "1717429979770-Surprised gopher old meme.mp4",
+  "thumbnail": "defaultVideoThumbnail.png",
+  "user": {
+    "$oid": "665a67209cbb7e2898f3f836"
+  },
+  "views": 0,
+  "createdAt": {
+    "$date": "2024-06-03T15:52:59.783Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-03T15:52:59.783Z"
+  },
+  "__v": 0
+}]
