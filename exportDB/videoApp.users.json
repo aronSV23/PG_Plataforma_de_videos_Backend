@@ -1,0 +1,95 @@
+[{
+  "_id": {
+    "$oid": "665a67209cbb7e2898f3f836"
+  },
+  "username": "test1",
+  "email": "test1@test.com",
+  "name": "Test1",
+  "lastName": "test1",
+  "password": "$2b$10$PuMER//edvE3EdlgRmqKmuQPLTWiGSszetOA5bbsO.Q8VyMUQfn62",
+  "profilePicture": "1717354821178-cat-original.jpg",
+  "role": "user",
+  "createdAt": {
+    "$date": "2024-06-01T00:11:12.826Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-02T19:00:21.210Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665a6ccc3f3e2ce192adc28e"
+  },
+  "username": "test2",
+  "email": "test2@test.com",
+  "name": "Test2",
+  "lastName": "test2",
+  "password": "$2b$10$rIF1vMvo4YAxnFCLf0CpCuqem00yisWrWYGgilBSjO5UxUs0/Ex4i",
+  "profilePicture": "1717216775830-Michi.png",
+  "role": "user",
+  "createdAt": {
+    "$date": "2024-06-01T00:35:24.638Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-02T19:54:10.616Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665a7f7d6baded091481e45e"
+  },
+  "username": "test3",
+  "email": "test3@test.com",
+  "name": "test3",
+  "lastName": "test3",
+  "password": "$2b$10$aklZ5lKe3OrAu4LEK5ifeumQGV2FBik6yyblQzR2d.9lMyf7uN0i6",
+  "profilePicture": "defaultProfilePicture.jpg",
+  "role": "user",
+  "createdAt": {
+    "$date": "2024-06-01T01:55:09.258Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-01T01:55:09.258Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665a7fe25b51d534cff73b68"
+  },
+  "username": "test4",
+  "email": "test4@test.com",
+  "name": "test4",
+  "lastName": "test4",
+  "password": "$2b$10$tJy7S5gDTjVLphlRJbHZeOO8G90iRdE7mStb7oDdesjwd.bw5/9me",
+  "profilePicture": "defaultProfilePicture.jpg",
+  "role": "user",
+  "createdAt": {
+    "$date": "2024-06-01T01:56:50.677Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-01T01:56:50.677Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "665a81541ba97f08a83eb605"
+  },
+  "username": "test5",
+  "email": "test5@test.com",
+  "name": "test5",
+  "lastName": "test5",
+  "password": "$2b$10$/d06hFLyWbA9x4grplNhEeyTf9vY08UdlbG60vdxzL4mprwuWvFnK",
+  "profilePicture": "defaultProfilePicture.jpg",
+  "role": "user",
+  "createdAt": {
+    "$date": "2024-06-01T02:03:00.866Z"
+  },
+  "updatedAt": {
+    "$date": "2024-06-01T02:03:00.866Z"
+  },
+  "__v": 0
+}]
