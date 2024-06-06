@@ -57,4 +57,7 @@ const validatePartialUser = (data) => userSchema.partial().safeParse(data)
 // Validar datos del usuario en login
 const validatelogin = (data) => loginSchema.safeParse(data)
 
-export { validatePartialUser, validateUser, validatelogin }
+const validateRole = (data) => z.object({ role: z.enum(['student', 'teacher']) }).safeParse(data)
+
+export { validatePartialUser, validateRole, validateUser, validatelogin }
+

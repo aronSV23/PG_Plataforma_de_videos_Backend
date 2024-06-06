@@ -4,7 +4,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { TOKEN_SECRET } from '../config/config.js'
 import User from '../models/user.model.js'
-import { validatePartialUser, validateUser, validatelogin } from '../schemas/user.schema.js'
+import { validatePartialUser, validateRole, validateUser, validatelogin } from '../schemas/user.schema.js'
 
 export const register = async (req, res) => {
   try {
@@ -52,7 +52,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ errors: errorMessages })
     }
 
-    const userFound = await User.findOne({ email: result.data.email }).lean()
+    const userFound = await User.findOne({ email: result.data.email }).populate('teacherAssigned', 'username name lastName -_id').lean()
     if (!userFound) return res.status(400).json({ errors: [{ path: 'email', message: 'The email does not exist' }] })
 
     const isMatch = await bcrypt.compare(result.data.password, userFound.password)
@@ -85,7 +85,7 @@ export const logout = (req, res) => {
 
 export const profile = async (req, res) => {
   try {
-    const userFound = await User.findById(req.user.id).lean()
+    const userFound = await User.findById(req.user.id).populate('teacherAssigned', 'username name lastName -_id').lean()
 
     if (!userFound) { return res.status(400).json({ message: 'user not found' }) }
 
@@ -95,6 +95,65 @@ export const profile = async (req, res) => {
     delete userFound.__v
 
     return res.status(201).json({ data: userFound })
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error', error: err.message })
+  }
+}
+
+export const changeRole = async (req, res) => {
+  try {
+    const result = validateRole(req.body)
+
+    if (!result.success) {
+      const errorMessages = result.error.issues.map(err => ({ path: err.path[0], message: err.message }))
+      return res.status(400).json({ errors: errorMessages })
+    }
+
+    const userUpdate = await User.findByIdAndUpdate(req.user.id, result.data, { new: true }).populate('teacherAssigned', 'username name lastName -_id')
+
+    if (!userUpdate) {
+      return res.status(404).json({ message: 'Fail to update role' })
+    }
+
+    const userObject = userUpdate.toObject()
+    delete userObject.password
+    delete userObject.createdAt
+    delete userObject.updatedAt
+    delete userObject.__v
+
+    return res.status(200).json({ message: 'User updated successfully', data: userObject })
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error', error: err.message })
+  }
+}
+
+export const changeTeacherAssigned = async (req, res) => {
+  try {
+    const { teacherUsername } = req.body
+
+    if (!teacherUsername) {
+      return res.status(400).json({ errors: [{ path: 'teacher', message: 'Teacher username is needed' }] })
+    }
+
+    const teacher = await User.findOne({ username: teacherUsername })
+
+    if (!teacher) { return res.status(400).json({ message: 'teacher not found' }) }
+
+    if (teacher.role !== 'teacher') { return res.status(400).json({ message: `user ${teacher.username} is not a teacher` }) }
+
+    const userUpdate = await User.findByIdAndUpdate(req.user.id, { teacherAssigned: teacher._id }, { new: true }).populate('teacherAssigned', 'username name lastName -_id')
+
+    if (!userUpdate) {
+      return res.status(404).json({ message: 'Fail to update role' })
+    }
+
+    const userObject = userUpdate.toObject()
+    delete userObject.password
+    delete userObject.createdAt
+    delete userObject.updatedAt
+    delete userObject.__v
+
+    return res.status(200).json({ message: 'User updated successfully', data: userObject })
   } catch (err) {
     return res.status(500).json({ message: 'Server error', error: err.message })
   }
@@ -145,7 +204,7 @@ export const updateProfile = async (req, res) => {
       result.data.profilePicture = req.file.filename
     }
 
-    const userUpdate = await User.findByIdAndUpdate(userId, result.data, { new: true })
+    const userUpdate = await User.findByIdAndUpdate(userId, result.data, { new: true }).populate('teacherAssigned', 'username name lastName -_id')
 
     if (!userUpdate) {
       if (req.file) await fs.unlink(path.normalize(`uploads/profilePicture/${req.file.filename}`))

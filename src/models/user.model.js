@@ -42,8 +42,12 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['user', 'admin'], // Solo se permiten estos roles
-    default: 'user'
+    enum: ['student', 'teacher'], // Solo se permiten estos roles
+    default: 'student'
+  },
+  teacherAssigned: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User'
   }
 },
 {
