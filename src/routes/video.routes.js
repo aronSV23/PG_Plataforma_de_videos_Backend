@@ -1,6 +1,7 @@
 import express from 'express'
-import { createVideo, deleteVideo, getAllUserVideos, getThumbnail, getVideoDataById, updateVideo, updateVideoData, watchVideo } from '../controllers/video.controller.js'
+import { createVideo, deleteVideo, getAllUserVideos, getThumbnail, getVideoDataById, getVideoDataByTaskId, updateTaskScoreInVideo, updateVideo, updateVideoData, watchVideo } from '../controllers/video.controller.js'
 import { auth } from '../middlewares/auth.middleware.js'
+import { isATeacher } from '../middlewares/isATeacher.middleware.js'
 import { handleErrorThumbnail, uploadThumbnail } from '../middlewares/thumbnailMulter.middleware.js'
 import { handleErrorVideo, uploadVideo } from '../middlewares/videoMulter.middleware.js'
 
@@ -11,6 +12,10 @@ router.post('/', auth, uploadVideo.single('video'), handleErrorVideo, createVide
 router.get('/', auth, getAllUserVideos)
 
 router.get('/:videoId', auth, getVideoDataById)
+
+router.get('/task/:taskId', auth, isATeacher, getVideoDataByTaskId)
+
+router.patch('/task/:videoId', updateTaskScoreInVideo)
 
 router.get('/watch/:videoId', watchVideo)
 

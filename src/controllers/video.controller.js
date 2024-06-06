@@ -1,7 +1,9 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { processVideo } from '../libs/ffmpeg.js'
+import Task from '../models/task.model.js'
 import Video from '../models/video.model.js'
-import { validatePartialVideo, validateVideo } from '../schemas/video.schema.js'
+import { validatePartialVideo, validateScore, validateVideo } from '../schemas/video.schema.js'
 
 export const createVideo = async (req, res) => {
   try {
@@ -20,6 +22,23 @@ export const createVideo = async (req, res) => {
     if (result.data.tags) result.data.tags = result.data.tags.split(' ')
     result.data.user = req.user.id
     result.data.filePath = req.file.filename
+
+    // Generar thumbnail y obtener duración del video
+    const thumbnailPath = `uploads/thumbnails/${Date.now()}-thumbnail.png`
+    const { duration } = await processVideo(req.file.path, thumbnailPath)
+    result.data.thumbnail = path.basename(thumbnailPath)
+    result.data.duration = duration.toFixed(3) // Agregar duración al objeto de datos
+
+    if (result.data.task) {
+      const task = await Task.findById(result.data.task)
+      if (!task) {
+        await fs.unlink(path.normalize(`uploads/videos/${req.file.filename}`))
+        return res.status(400).json({ errors: [{ path: 'Task', message: 'The Task not found' }] })
+      }
+      result.data.task = {
+        taskId: task._id
+      }
+    }
 
     const newVideo = new Video({
       ...result.data
@@ -54,9 +73,52 @@ export const getVideoDataById = async (req, res) => {
   }
 }
 
+export const getVideoDataByTaskId = async (req, res) => {
+  const { taskId } = req.params
+
+  try {
+    const videos = await Video.find({ 'task.taskId': taskId }).populate('user', 'username -_id')
+
+    if (!videos || videos.length === 0) {
+      return res.status(404).json({ message: 'No videos found for the specified task' })
+    }
+
+    res.status(200).json(videos)
+  } catch (error) {
+    res.status(500).json({ message: 'Error finding videos', error: error.message })
+  }
+}
+
+export const updateTaskScoreInVideo = async (req, res) => {
+  const { videoId } = req.params
+
+  try {
+    const result = validateScore(req.body)
+
+    if (!result.success) {
+      const errorMessages = result.error.issues.map(err => ({ path: err.path[0], message: err.message }))
+      return res.status(400).json({ errors: errorMessages })
+    }
+
+    const video = await Video.findOneAndUpdate(
+      { _id: videoId },
+      { 'task.score': result.data.score },
+      { new: true }
+    ).populate('user', 'username -_id')
+
+    if (!video) {
+      return res.status(404).json({ message: 'Video or Task not found' })
+    }
+
+    res.status(200).json(video)
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating task score', error: error.message })
+  }
+}
+
 export const getAllUserVideos = async (req, res) => {
   try {
-    const videos = await Video.find({ user: req.user.id }).populate('user', 'username')
+    const videos = await Video.find({ user: req.user.id }).populate('user', 'username -_id')
     res.status(200).json(videos)
   } catch (error) {
     res.status(500).json({ message: 'Error getting videos', error: error.message })
@@ -111,7 +173,7 @@ export const updateVideo = async (req, res) => {
 
     const { videoId } = req.params
 
-    const prevVideoData = await Video.findById(videoId).populate('user', 'username')
+    const prevVideoData = await Video.findById(videoId).populate('user', 'username -_id')
 
     if (!prevVideoData) {
       if (req.file) await fs.unlink(path.normalize(`uploads/videos/${req.file.filename}`))
@@ -122,7 +184,7 @@ export const updateVideo = async (req, res) => {
       return res.status(401).json({ message: 'You are not allow to update this video, authorization denied' })
     }
 
-    const video = await Video.findByIdAndUpdate(videoId, { filePath: req.file.filename }, { new: true }).populate('user', 'username')
+    const video = await Video.findByIdAndUpdate(videoId, { filePath: req.file.filename }, { new: true }).populate('user', 'username -_id')
 
     if (!video) {
       if (req.file) await fs.unlink(path.normalize(`uploads/videos/${req.file.filename}`))
@@ -167,7 +229,7 @@ export const updateVideoData = async (req, res) => {
 
     if (result.data.tags) result.data.tags = result.data.tags.split(' ')
 
-    const video = await Video.findByIdAndUpdate(videoId, result.data, { new: true }).populate('user', 'username')
+    const video = await Video.findByIdAndUpdate(videoId, result.data, { new: true }).populate('user', 'username -_id')
 
     if (!video) {
       if (req.file) await fs.unlink(path.normalize(`uploads/thumbnails/${req.file.filename}`))

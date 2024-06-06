@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getProfilePicture, login, logout, profile, register, updateProfile } from '../controllers/user.controller.js'
+import { changeRole, changeTeacherAssigned, getProfilePicture, login, logout, profile, register, updateProfile } from '../controllers/user.controller.js'
 import { auth } from '../middlewares/auth.middleware.js'
 import { handleErrorProfilePicture, uploadProfilePicture } from '../middlewares/profilePictureMulter.middleware.js'
 
@@ -10,6 +10,10 @@ router.post('/register', register)
 router.post('/login', login)
 
 router.post('/logout', logout)
+
+router.post('/role', auth, changeRole)
+
+router.post('/teacherAssigned', auth, changeTeacherAssigned)
 
 router.get('/profile', auth, profile)
 
